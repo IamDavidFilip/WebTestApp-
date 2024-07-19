@@ -38,6 +38,13 @@ stages:
                   artifact: 'AzureTestProjects'
                 
                 - task: IISWebAppManagementOnMachineGroup@0
+                  inputs:
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'CreateOrUpdateWebsite'
+                    WebsiteName: '${{ variables.IISWebsiteName }}'
+                    WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+                    WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+                - task: IISWebAppManagementOnMachineGroup@0
                   name: 'StopIIS'
                   displayName: 'Stop IIS website'
                   inputs:
