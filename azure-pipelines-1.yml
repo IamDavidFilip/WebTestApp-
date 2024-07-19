@@ -35,7 +35,7 @@ stages:
                 - download: 'BuildPipeline'
                   name: 'DownloadBuildArtifacts'
                   displayName: 'Download Build Artifacts'
-                  artifact: 'AzureTestProject'
+                  artifact: 'AzureTestProjects'
                 
                 - task: IISWebAppManagementOnMachineGroup@0
                   name: 'StopIIS'
@@ -45,14 +45,14 @@ stages:
                     ActionIISWebsite: 'StopWebsite'
                     StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
 
-                - script: echo $(Pipeline.Workspace)\BuildPipeline\AzureTestProject\RoundTheCode.AzureTestProject
+                - script: echo $(Pipeline.Workspace)\BuildPipeline\AzureTestProjects\RoundTheCode.AzureTestProject
 
                 - task: IISWebAppDeploymentOnMachineGroup@0
                   name: 'DeployIIS'
                   displayName: 'Deploy IIS website'                
                   inputs:
                     WebSiteName: '${{ variables.IISWebsiteName }}'
-                    Package: '$(Pipeline.Workspace)\BuildPipeline\AzureTestProject\RoundTheCode.AzureTestProject'
+                    Package: '$(Pipeline.Workspace)\BuildPipeline\AzureTestProjects\RoundTheCode.AzureTestProject'
                     TakeAppOfflineFlag: true
                 
                 - task: IISWebAppManagementOnMachineGroup@0
