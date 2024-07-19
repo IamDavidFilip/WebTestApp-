@@ -44,16 +44,6 @@ stages:
                     WebsiteName: '${{ variables.IISWebsiteName }}'
                     WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
                     WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
-                - task: IISWebAppManagementOnMachineGroup@0
-                  name: 'StopIIS'
-                  displayName: 'Stop IIS website'
-                  inputs:
-                    IISDeploymentType: 'IISWebsite'
-                    ActionIISWebsite: 'StopWebsite'
-                    StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
-
-                - script: echo $(Pipeline.Workspace)\BuildPipeline\AzureTestProjects\RoundTheCode.AzureTestProject
-
                 - task: IISWebAppDeploymentOnMachineGroup@0
                   name: 'DeployIIS'
                   displayName: 'Deploy IIS website'                
