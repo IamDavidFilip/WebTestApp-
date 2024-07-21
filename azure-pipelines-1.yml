@@ -9,6 +9,8 @@ trigger:
 variables:
   websiteName: 'AzureTestProject'
   websitePhysicalPath: '%SystemDrive%\inetpub\wwwroot\$(websiteName)'
+  appPoolName: 'AzureTestProject'
+
 
 resources:
  pipelines:
@@ -66,4 +68,4 @@ stages:
                 - task: IISWebAppDeploymentOnMachineGroup@0
                   inputs:
                     WebSiteName: '$(websiteName)'
-                    Package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/$(projectName).zip'
+                    Package: '$(Pipeline.Workspace)\BuildPipeline\AzureTestProjects\RoundTheCode.AzureTestProject'
