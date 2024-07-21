@@ -7,7 +7,8 @@ trigger:
 - none
 
 variables:
-  IISWebsiteName: 'AzureTestProject'
+  websiteName: 'AzureTestProject'
+  websitePhysicalPath: '%SystemDrive%\inetpub\wwwroot\$(websiteName)'
 
 resources:
  pipelines:
@@ -39,23 +40,30 @@ stages:
                 
                 - task: IISWebAppManagementOnMachineGroup@0
                   inputs:
-                    IISDeploymentType: 'IISWebsite'
-                    ActionIISWebsite: 'CreateOrUpdateWebsite'
-                    WebsiteName: '${{ variables.IISWebsiteName }}'
-                    WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
-                    WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+                   IISDeploymentType: 'IISWebsite'
+                   ActionIISWebsite: 'CreateOrUpdateWebsite'
+                   WebsiteName: '$(websiteName)'
+                   WebsitePhysicalPath: '$(websitePhysicalPath)'
+                   CreateOrUpdateAppPoolForWebsite: true
+                   AppPoolNameForWebsite: '$(appPoolName)'
+                   DotNetVersionForWebsite: 'No Managed Code'
+                   PipeLineModeForWebsite: 'Integrated'
+                   AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
+                   AddBinding: true
+                   Bindings: |
+                       {
+                           bindings:[
+                               {
+                                   "protocol":"http",
+                                   "ipAddress":"",
+                                   "hostname":"",
+                                   "port":"80",
+                                   "sslThumbprint":"",
+                                   "sniFlag":false
+                                 }
+                             ]
+                         }
                 - task: IISWebAppDeploymentOnMachineGroup@0
-                  name: 'DeployIIS'
-                  displayName: 'Deploy IIS website'                
                   inputs:
-                    WebSiteName: '${{ variables.IISWebsiteName }}'
-                    Package: '$(Pipeline.Workspace)\BuildPipeline\AzureTestProjects\RoundTheCode.AzureTestProject'
-                    TakeAppOfflineFlag: true
-                
-                - task: IISWebAppManagementOnMachineGroup@0
-                  name: 'StartIIS'
-                  displayName: 'Start IIS website'                     
-                  inputs:
-                    IISDeploymentType: 'IISWebsite'
-                    ActionIISWebsite: 'StartWebsite'
-                    StartStopWebsiteName: '${{ variables.IISWebsiteName }}'
+                    WebSiteName: '$(websiteName)'
+                    Package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/$(projectName).zip'
